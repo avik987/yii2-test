@@ -6,8 +6,6 @@ use Yii;
 use yii\rest\ActiveController;
 use app\models\User;
 use yii\web\UploadedFile;
-
-
 class UserController extends ActiveController
 {
     public $modelClass = 'app\models\User';
@@ -40,7 +38,7 @@ class UserController extends ActiveController
 
             $response_data[] = $value->userDefination();
         }
-        $response = ['success'=>true, 'data'=>['model'=>$response_data],'errors'=>[]];
+        $response = ['success'=>true, 'data'=>$response_data,'errors'=>[]];
         return $response;
     }
 
@@ -81,15 +79,11 @@ class UserController extends ActiveController
                 return ['success'=>false, 'data'=>[],'errors'=>[]];
             }
             $model->setAttributes($request->post());
-            $result = $model->attributes;
-            $result['_id'] = (string)$model->_id;
+
 
             $model->avatar_url = $this->base64ToImage($model->file);
 
             if($model->save(true, ['title','bio'])){
-
-
-
                 $response = ['success'=>true, 'data'=>$model->userDefination(),'errors'=>[]];
             }else{
                 $response = ['success'=>true, 'data'=>[],'errors'=>$model->errors];
@@ -133,6 +127,8 @@ class UserController extends ActiveController
            }else if(!Yii::$app->security->validatePassword($model->password,$user->password)){
                $response = ['success'=>false, 'data'=>[],'errors'=>['email'=>['Wrong password']]];
            }else{
+               $user->auth_token = Yii::$app->security->generateRandomString();
+               $user->save();
                $response = ['success'=>true, 'data'=>$user->userDefination(true),'errors'=>[]];
            }
         }else{
