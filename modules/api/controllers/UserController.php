@@ -74,16 +74,13 @@ class UserController extends ActiveController
 
         if ($auth_token) {
             $request = Yii::$app->request;
-
             $model = User::findOne(['auth_token'=>$auth_token]);
             if(!$model){
                 return ['success'=>false, 'data'=>[],'errors'=>[]];
             }
             $model->setAttributes($request->post());
-
-
             $model->avatar_url = $this->base64ToImage($model->file);
-
+            var_dump($model->avatar_url);die;
             if($model->save(true, ['title','bio'])){
                 $response = ['success'=>true, 'data'=>$model->userDefination(),'errors'=>[]];
             }else{
