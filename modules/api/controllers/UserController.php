@@ -80,8 +80,8 @@ class UserController extends ActiveController
             }
             $model->setAttributes($request->post());
             $model->avatar_url = $this->base64ToImage($model->file);
-            var_dump($model->avatar_url);die;
-            if($model->save(true, ['title','bio'])){
+
+            if($model->save(true, ['title','bio','avatar_url'])){
                 $response = ['success'=>true, 'data'=>$model->userDefination(),'errors'=>[]];
             }else{
                 $response = ['success'=>true, 'data'=>[],'errors'=>$model->errors];
