@@ -69,8 +69,8 @@ class UserController extends ActiveController
 
     public function actionUpdate(){
         $headers = Yii::$app->request->headers;
-        echo"<pre>";print_r($headers);die;
-        $auth_token = $headers->get('auth_token');
+
+        $auth_token = $headers->get('Auth-Token');
 
         if ($auth_token) {
             $request = Yii::$app->request;
